@@ -1,0 +1,126 @@
+<div id="smartfields">
+  <div class="row-fluid">
+    <div class="span6 smart">
+      <label for="signup_placeholder">Select your parish...</label>
+      <input class="text" id="signup_placeholder" name="signup[placeholder]" type="text" placeholder="Select your parish..." >
+    </div>
+    <div class="span6">
+      <label for="signup_custom_values_place_of_worship_custom">Selected parish</label>
+      {% if page.type_slug == "signup" %}
+      {% text_field "custom_values.place_of_worship", class:"text selectedP", placeholder:"Parish" %}
+      {% else %}
+      {% text_field "signup.custom_values.place_of_worship", class:"text selectedP", placeholder:"Parish" %}
+      {% endif %}
+      <span id="clearSelection" style="color:#97002e;display:none;float:right;margin-right:10px;margin-top:-10px;font-size:14px;" onclick="clearSelection()">Clear</span>
+    </div>
+
+    <div class="span12">
+      <label class="checkbox"  for="signup_custom_values_other_place_of_worship_custom">{% check_box "custom_values.other_place_of_worship", class:"checkbox" %}I do not belong to a parish on this list</ label >
+    </div>
+  </div>
+</div>
+
+      
+
+<script>
+  $(document).ready(function(){
+    $('.submit-button').attr('disabled',true);
+    $('.selectedP').attr('disabled',true);
+  });
+  var substringMatcher = function(strs) {
+    return function findMatches(q, cb) {
+      var matches, substringRegex;
+
+      // an array that will be populated with substring matches
+      matches = [];
+
+      // regex used to determine if a string contains the substring `q`
+      substrRegex = new RegExp(q, 'i');
+
+      // iterate through the pool of strings and for any string that
+      // contains the substring `q`, add it to the `matches` array
+      $.each(strs, function(i, str) {
+        if (substrRegex.test(str)) {
+          matches.push(str);
+        }
+      });
+
+      cb(matches);
+    };
+  };
+
+  var parishes = [ {% subpage 'mn_parishes' with 'parishes_list' %}
+                 ];
+  var parishes2 = substringMatcher(parishes);
+
+
+
+  $('#smartfields #signup_placeholder').typeahead({
+    hint: true,
+    highlight: true,
+    minLength: 1
+  },
+                                                  {
+    name: 'parishes',
+    source: substringMatcher(parishes),
+    limit: 15
+  }).blur(validateSelection);
+
+  function validateSelection() {
+    if ($.inArray($(this).val(), parishes) === -1) {
+      alert('Please choose a parish from the available options');
+    }
+    else {
+      var selectedParish = $('#signup_placeholder').val();
+      $('#signup_custom_values_place_of_worship_custom').val(selectedParish); 
+      $('.submit-button').prop("disabled", false);
+      $('#signup_placeholder').val('');
+      $("#clearSelection").show();
+    }
+  }
+
+  $('#signup_custom_values_other_place_of_worship_custom').change(function () {
+    if($('#signup_custom_values_place_of_worship_custom').val().length !=0) {
+      $('.submit-button').prop("disabled", false);
+    } else {
+      $('.submit-button').prop("disabled", !this.checked);
+    }
+  }).change();
+</script>
+      
+<script>
+  function clearSelection() {
+    $('#signup_custom_values_place_of_worship_custom').val('');
+    $("#clearSelection").hide();
+    if($('#signup_custom_values_other_place_of_worship_custom').is(":checked")) {
+      $('.submit-button').prop("disabled", false);
+    }
+    else {
+      $('.submit-button').prop("disabled", true);
+    }
+  }
+</script>
+
+<style>
+  .smart>span {width:100% !important;}
+  .tt-menu {background: #e5e5e5;}
+  .twitter-typeahead .text {max-width:100%;}
+  .tt-dropdown-menu {
+    max-height:150px;
+    overflow-y:auto;
+  }
+  .tt-input {
+    margin-bottom:0px !important;
+  }
+  .tt-menu.tt-open {
+    padding:10px;
+  }
+  .twitter-typeahead { width:100%;}
+  .submit-button:disabled, .submit-button[disabled]{
+    background-color: #5a5a5a;
+    color: darkgrey;
+    cursor: not-allowed;
+  }
+  .selectedP { background-color:lightgrey; }
+  #clearSelection:hover{ text-decoration:underline; color:#d50242;cursor:pointer;}
+</style> 
