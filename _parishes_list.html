@@ -1,0 +1,13 @@
+{% assign parishArray = '' %}
+{% assign bp = false %}
+{% for leaderboard in page.page_leaderboards %}
+{% for entry in leaderboard.entries %}
+{% if entry.signup.tag_list contains 'MN Parish' %}
+{% if bp == false %}{% assign parishArray = entry.signup.last_name %}{% else %}{% assign parishArray = parishArray | concat:"|" | concat: entry.signup.last_name %}{% endif %}
+{% assign bp = true %}
+{% endif %}
+{% endfor %}
+{% endfor %}
+{% assign parishArray2 = parishArray | split:'|' %}
+{% assign parishArray3 = parishArray2 | sort %}
+{% for parish in parishArray3 %}"{{ parish | replace:"&#39;","'" }}"{% unless forloop.last %}, {% endunless %}{% endfor %}
