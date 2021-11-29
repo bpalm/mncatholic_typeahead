@@ -1,21 +1,21 @@
 <div id="smartfields">
-  <div class="row-fluid">
-    <div class="span6 smart">
+  <div class="form-row">
+    <div class="form-group col-sm-6 smart">
       <label for="signup_placeholder">Select your parish...</label>
-      <input class="text" id="signup_placeholder" name="signup[placeholder]" type="text" placeholder="Select your parish..." >
+      <input class="form-control text" id="signup_placeholder" name="signup[placeholder]" type="text" placeholder="Select your parish..." >
     </div>
-    <div class="span6">
+    <div class="form-group col-sm-6">
       <label for="signup_custom_values_place_of_worship_custom">Selected parish</label>
       {% if page.type_slug == "signup" %}
-      {% text_field "custom_values.place_of_worship", class:"text selectedP", placeholder:"Parish" %}
+      {% text_field "custom_values.place_of_worship", class:"form-control text selectedP", placeholder:"Parish" %}
       {% else %}
-      {% text_field "signup.custom_values.place_of_worship", class:"text selectedP", placeholder:"Parish" %}
+      {% text_field "signup.custom_values.place_of_worship", class:"form-control text selectedP", placeholder:"Parish" %}
       {% endif %}
       <span id="clearSelection" style="color:#97002e;display:none;float:right;margin-right:10px;margin-top:-10px;font-size:14px;" onclick="clearSelection()">Clear</span>
     </div>
 
-    <div class="span12">
-      <label class="checkbox"  for="signup_custom_values_other_place_of_worship_custom">{% check_box "custom_values.other_place_of_worship", class:"checkbox" %}I do not belong to a parish on this list</ label >
+    <div class="form-group custom-control custom-checkbox">
+      <label class="custom-control-label"  for="signup_custom_values_other_place_of_worship_custom">{% check_box "custom_values.other_place_of_worship", class:"custom-control-input" %}I do not belong to a parish on this list</ label >
     </div>
   </div>
 </div>
