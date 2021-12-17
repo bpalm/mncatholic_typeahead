@@ -25,7 +25,6 @@
 <script>
   $(document).ready(function(){
     $('.submit-button').attr('disabled',true);
-    $('.selectedP').attr('disabled',true);
   });
   var substringMatcher = function(strs) {
     return function findMatches(q, cb) {
@@ -121,6 +120,6 @@
     color: darkgrey;
     cursor: not-allowed;
   }
-  .selectedP { background-color:lightgrey; }
+  .selectedP { background-color:lightgrey;pointer-events: none; }
   #clearSelection:hover{ text-decoration:underline; color:#d50242;cursor:pointer;}
 </style> 
